@@ -24,11 +24,22 @@ qt_add_executable(gokit
     ${PROJECT_SOURCES}
 )
 
-target_link_libraries(gokit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(gokit
+    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    "-framework Foundation"
+    "-framework CoreBluetooth")
 
-target_include_directories(gokit PRIVATE "../ultragui/include")
-target_link_directories(gokit PRIVATE "../ultragui/lib")
-target_link_libraries(gokit PRIVATE ultragui-d)
+target_include_directories(gokit
+    PRIVATE "../ultragui/include"
+    PRIVATE "../blewrapper/include")
+
+target_link_directories(gokit
+    PRIVATE "../ultragui/lib"
+    PRIVATE "../blewrapper/lib")
+
+target_link_libraries(gokit
+    PRIVATE ultragui-d
+    PRIVATE blewrappermacos-d)
 
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.gokit)
 
@@ -38,6 +49,7 @@ set_target_properties(gokit PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE_INFO_PLIST Info.plist.in
 )
 
 include(GNUInstallDirs)
